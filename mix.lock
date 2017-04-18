@@ -1,0 +1,2 @@
+%{"fs": {:hex, :fs, "2.12.0", "ad631efacc9a5683c8eaa1b274e24fa64a1b8eb30747e9595b93bec7e492e25e", [:rebar3], []},
+  "mix_test_watch": {:git, "https://github.com/aforward/mix-test.watch.git", "6fdbcf06bb164885a2533ea2f3206a4981dbfd47", []}}
