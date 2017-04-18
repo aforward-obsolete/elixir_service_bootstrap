@@ -8,36 +8,69 @@ copy it once, and then rebrand it to your service.
 
 ## Installation
 
-For the installation, we will show how to rebrand to create
-an `Invoices` service.
-
-
-### Clone the Repo
-
 First, get a copy of the code, and remove the `.git` directory.
 
 ```
 git clone git@github.com:aforward/elixir_service_bootstrap.git
+```
+
+Let's now rename the project to your service. We will use the `Invoices` as the module name and `invoices` as the OTP (aka atom) name as an example, please rename to your service.
+
+```
+MODULE=Invoices OTP=invoices elixir_service_bootstrap/bin/rename
+```
+
+If you are pushing this code to Github, then you can also run
+
+```
+git remote add origin git@github.com:<username>/<project>.git
+git push -u origin master
+```
+
+You are now ready to add your Ecto schema and start coding away your service.
+
+
+## Under The Hood
+
+In case you are interesting, under the hood, the script above will do a bunch fo things.
+
+### Rename project directory
+
+First, it will rename the bootstrap directory to your `OTP` name.
+
+```
 rm -rf elixir_service_bootstrap/.git
+mv elixir_service_bootstrap ${OTP}
+cd ${OTP}
+```
+
+### Initialize a new git repo
+
+Second, it will do an initial commit so you can see how your service deivated from the bootstrap.
+
+
+```
+git init
+git add .
+git commit -m "Initial commit (cloned aforward/elixir_service_bootstrap)"
 ```
 
 ### Rename Project Files
 
-Let's now rebrand the project, and relevant files away from
+Third it will rebrand the project, and relevant files away from
 `elixir_service_bootstrap` and towards `invoices` (change this
 for your own needs).
 
 ```
-mv elixir_service_bootstrap invoices
-cd invoices
-mv lib/elixir_service_bootstrap lib/invoices
-mv lib/elixir_service_bootstrap.ex lib/invoices.ex
-mv test/elixir_service_bootstrap_test.exs test/invoices_test.exs
+mv lib/elixir_service_bootstrap lib/${OTP}
+mv lib/elixir_service_bootstrap.ex lib/${OTP}.ex
+mv test/elixir_service_bootstrap_test.exs test/${OTP}_test.exs
 ```
+
 
 ### Rename Module References
 
-Now let's rename any `ElixirServiceBootstrap` to `Invoices` (or whatever your service is called).
+Fourth, we will rename any `ElixirServiceBootstrap` to `Invoices` (or whatever your service is called).
 
 ```
 Searching 16 files for "ElixirServiceBootstrap" (case sensitive)
@@ -99,20 +132,16 @@ Searching 16 files for "ElixirServiceBootstrap" (case sensitive)
 22 matches across 12 files
 ```
 
-The exact number of matches might vary, but in general a global search and replace should work just fine.
-
-### Rename atom references
-
-Now let's rename any `elixir_service_bootstrap` to `invoices` (or whatever your service is called).
+As well as rename any `elixir_service_bootstrap` to `invoices` (or whatever your service is called).
 
 ```
 Searching 16 files for "elixir_service_bootstrap" (case sensitive)
 
 /private/tmp/invoices/mix.exs:
-    3  
+    3
     4    def project do
     5:     [app: :elixir_service_bootstrap,
- 
+
 /private/tmp/invoices/config/config.exs:
     5: config :elixir_service_bootstrap, ecto_repos: [Invoices.Repo]
     .
@@ -132,8 +161,23 @@ Searching 16 files for "elixir_service_bootstrap" (case sensitive)
 
 /private/tmp/invoices/lib/invoices/repo.ex:
     2:   use Ecto.Repo, otp_app: :elixir_service_bootstrap
-    
-9 matches across 5 files    
+
+9 matches across 5 files
 ```
 
+
 The exact number of matches might vary, but in general a global search and replace should work just fine.
+
+The actual script to do this will be
+
+```
+echo "# ${MODULE}\n" >> README.md
+find . -name '*.ex' -o -name '*.exs' | xargs sed -i "" 's/elixir_service_bootstrap/$OTP/g'
+find . -name '*.ex' -o -name '*.exs' | xargs sed -i "" 's/ElixirServiceBootstrap/$MODULE/g'
+```
+
+### Recompile, Test and Commit
+
+Finally, recompile, test and commit the changes
+
+

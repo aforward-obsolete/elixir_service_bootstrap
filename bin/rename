@@ -1,0 +1,44 @@
+#!/bin/bash
+
+function usage() {
+  echo "SAMPLE USAGE:"
+  echo ""
+  echo "  MODULE=Invoices OTP=invoices ./elixir_service_bootstrap/bin/rename"
+  echo ""
+  exit;
+}
+
+if [ -z ${MODULE} ]; then
+  echo ""
+  echo "Missing \$MODULE variable (e.g. Invoices)"
+  echo ""
+  usage
+fi
+
+if [ -z ${OTP} ]; then
+  echo ""
+  echo "Missing \$OTP variable (e.g. invoices)"
+  echo ""
+  usage
+fi
+
+rm -rf elixir_service_bootstrap/.git
+mv elixir_service_bootstrap ${OTP}
+cd ${OTP}
+
+git init
+git add .
+git commit -m "Initial commit of ${OTP} (cloned aforward/elixir_service_bootstrap)"
+
+mv lib/elixir_service_bootstrap lib/${OTP}
+mv lib/elixir_service_bootstrap.ex lib/${OTP}.ex
+mv test/elixir_service_bootstrap_test.exs test/${OTP}_test.exs
+
+echo "# ${MODULE}" > README.md
+find . -name '*.ex' -o -name '*.exs' | xargs sed -i "" "s/elixir_service_bootstrap/${OTP}/g"
+find . -name '*.ex' -o -name '*.exs' | xargs sed -i "" "s/ElixirServiceBootstrap/${MODULE}/g"
+
+mix deps.get
+MIX_ENV=test mix test.once
+git add .
+git commit -m "Renamed to ${MODULE} / ${OTP}"
