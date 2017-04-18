@@ -17,10 +17,15 @@ defmodule ElixirServiceBootstrap.Mixfile do
   end
 
   defp aliases do
-    []
+    ["ecto.reset": ["ecto.drop --quiet", "ecto.create --quiet", "ecto.migrate"],
+     "test.once": ["ecto.reset", "test"]]
   end
 
   defp deps do
-    [{:mix_test_watch, github: "aforward/mix-test.watch", only: :dev, runtime: false}]
+    [{:mix_test_watch, github: "aforward/mix-test.watch", only: :dev, runtime: false},
+     {:postgrex, "~> 0.13.2"},
+     {:ecto, "~> 2.1"},
+     {:poison, "~> 3.1.0"},
+     {:ex_doc, ">= 0.0.0", only: :dev}]
   end
 end

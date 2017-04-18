@@ -2,13 +2,11 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :elixir_service_bootstrap, ecto_repos: [ElixirServiceBootstrap.Repo]
+
 if Mix.env == :dev do
   config :mix_test_watch,
-    setup_tasks: [
-      # "ecto.drop --quiet",
-      # "ecto.create --quiet",
-      # "ecto.migrate",
-    ],
+    setup_tasks: ["ecto.reset"],
     ansi_enabled: :ignore,
     clear: true
 end
@@ -38,4 +36,5 @@ end
 # Configuration from the imported file will override the ones defined
 # here (which is why it is important to import them last).
 #
-#     import_config "#{Mix.env}.exs"
+
+import_config "#{Mix.env}.exs"
