@@ -41,4 +41,4 @@ find . -name '*.ex' -o -name '*.exs' | xargs sed -i "" "s/ElixirServiceBootstrap
 mix deps.get
 MIX_ENV=test mix test.once
 git add .
-git commit -m "Renamed to ${MODULE} / ${OTP}"
+git commit -m "Rename ElixirServiceBootstrap to ${MODULE} (${OTP})"
