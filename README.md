@@ -1,3 +1,5 @@
+THIS PROJECT IS OBSOLETE, instead please look at [gen_template_ecto_service](https://raw.githubusercontent.com/aforward/gen_template_ecto_service), which uses an alternative for `mix new`, based on [Dave Thomas'](https://github.com/pragdave/mix_templates) extensible templating engine for creating project templates.
+
 # ElixirServiceBootstrap
 
 Your this repo to bootstrap your elixir service that needs a
